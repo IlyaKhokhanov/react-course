@@ -1,7 +1,8 @@
 import './App.scss';
+import { Search } from './components/Search/Search';
 
 function App() {
-  return <div>Hello</div>;
+  return <Search />;
 }
 
 export default App;
