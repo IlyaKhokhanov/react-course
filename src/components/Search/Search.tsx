@@ -1,6 +1,7 @@
 import React from 'react';
 import { request } from '../../api';
 import { IRequest, requestObj } from '../../types';
+import './Search.scss';
 
 interface IProps {}
 
@@ -18,6 +19,7 @@ export class Search extends React.Component<IProps, IState> {
     };
     this.inputChange = this.inputChange.bind(this);
     this.searchHandler = this.searchHandler.bind(this);
+    this.searchHandler();
   }
 
   inputChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -49,17 +51,40 @@ export class Search extends React.Component<IProps, IState> {
       <>
         <div className="header">
           <input
+            className="header-input"
             defaultValue={localStorage.getItem('searchString') || ''}
             type="text"
             onChange={this.inputChange}
           />
-          <button onClick={this.searchHandler}>Search</button>
+          <button className="header-btn" onClick={this.searchHandler}>
+            Search
+          </button>
         </div>
 
         <div className="list">
           {this.state.list.map((el, indx) => (
-            <div key={indx}>
-              <h3>{el.name}</h3>
+            <div key={indx} className="list-item">
+              <h3 className="list-item-header">{el.name}</h3>
+              <div>
+                <span className="list-item-desc">Height: </span>
+                <span>{el.height}</span>
+              </div>
+              <div>
+                <span className="list-item-desc">Weight: </span>
+                <span>{el.mass}</span>
+              </div>
+              <div>
+                <span className="list-item-desc">Color skin: </span>
+                <span>{el.skin_color}</span>
+              </div>
+              <div>
+                <span className="list-item-desc">Color hair: </span>
+                <span>{el.hair_color}</span>
+              </div>
+              <div>
+                <span className="list-item-desc">Color eye: </span>
+                <span>{el.eye_color}</span>
+              </div>
             </div>
           ))}
         </div>
