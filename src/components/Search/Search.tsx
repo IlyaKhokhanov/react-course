@@ -11,7 +11,7 @@ interface IState {
 }
 
 export class Search extends React.Component<IProps, IState> {
-  constructor(props: never) {
+  constructor(props: object) {
     super(props);
     this.state = {
       input: localStorage.getItem('searchString') || '',
@@ -36,7 +36,6 @@ export class Search extends React.Component<IProps, IState> {
     )
       .then((data) => {
         if (typeof data !== 'string') {
-          console.log(data.results);
           this.setState({
             ...this.state,
             list: data.results,
