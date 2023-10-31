@@ -9,14 +9,20 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
     "preview": "vite preview",
-    "lint": "eslint",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "format:fix": "prettier --write src/**/*.{ts,tsx,css}",
     "prepare": "husky install"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "prettier --write . && git add -A ."
-    }
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "npm run format:fix"
+    ],
+    "src//*.{js,jsx,ts,tsx,json,css,scss,md}": [
+      "npm run format:fix"
+    ],
+    "src//*.+(js|json|ts|tsx)": [
+      "npm run lint"
+    ]
   },
   "dependencies": {
     "react": "^18.2.0",
