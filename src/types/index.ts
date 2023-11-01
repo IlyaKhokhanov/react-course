@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode } from 'react';
 
 type requestObj = {
   birth_year: string;
@@ -19,6 +19,12 @@ type requestObj = {
   vehicles: string[];
 };
 
+interface IState {
+  currentPage: number;
+  searchString: string;
+  list: requestObj[];
+}
+
 interface IRequest {
   results: requestObj[];
 }
@@ -32,4 +38,10 @@ interface ErrorBoundaryState {
   hasError: boolean;
 }
 
-export { type IRequest, type requestObj, type ErrorBoundaryProps, type ErrorBoundaryState };
+export {
+  type IRequest,
+  type requestObj,
+  type IState,
+  type ErrorBoundaryProps,
+  type ErrorBoundaryState,
+};
