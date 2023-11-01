@@ -1,5 +1,6 @@
 import React from 'react';
 import { requestObj } from '../../types';
+import './Card.scss';
 
 function Card(card: requestObj) {
   return (

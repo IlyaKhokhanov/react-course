@@ -3,6 +3,7 @@ import './App.scss';
 import { request } from './api';
 import { IRequest, IState } from './types';
 import List from './components/List/List';
+import Search from './components/Search/Search';
 
 function App() {
   const [state, setState] = useState<IState>({
@@ -12,7 +13,6 @@ function App() {
   });
 
   function updateList() {
-    localStorage.setItem('searchString', state.searchString);
     request<IRequest>(
       `https://swapi.dev/api/people/?search=${state.searchString}`,
     )
@@ -27,16 +27,17 @@ function App() {
       .catch((err) => console.error(err));
   }
 
-  // function inputChange(e: React.ChangeEvent<HTMLInputElement>) {
-  //   setState({
-  //     ...state,
-  //     searchString: e.target.value,
-  //   });
-  // }
+  function setSearchString(string: string) {
+    localStorage.setItem('searchString', state.searchString);
+    setState((prev) => ({
+      ...prev,
+      searchString: string,
+    }));
+  }
 
   useEffect(() => {
     updateList();
-  }, [state.searchString]);
+  }, [state.searchString, state.currentPage]);
 
   return (
     <div>
@@ -48,6 +49,7 @@ function App() {
       >
         Generate ERROR
       </button>
+      <Search searchHandler={setSearchString} />
       <List data={state.list} />
     </div>
   );
