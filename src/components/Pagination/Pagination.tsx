@@ -1,16 +1,37 @@
 import React from 'react';
-import { IState } from '../../types';
 import './Pagination.scss';
 
 type PaginationProps = {
-  data: IState;
+  totalCount: number;
+  itemsPerPage: number;
+  currentPage: number;
+  setCurrentPage: (number: number) => void;
 };
 
-function Pagination({ data }: PaginationProps) {
+function Pagination({
+  totalCount,
+  itemsPerPage,
+  currentPage,
+  setCurrentPage,
+}: PaginationProps) {
+  const numbersArr = [];
+
+  for (let i = 1; i <= Math.ceil(totalCount / itemsPerPage); i++) {
+    numbersArr.push(i);
+  }
+
   return (
     <ul className="pagination">
-      {data.list.map((el, indx) => (
-        <div key={indx}>{el.name}</div>
+      {numbersArr.map((el) => (
+        <li
+          key={el}
+          className={
+            el === currentPage ? 'pagination-item-active' : 'pagination-item'
+          }
+          onClick={() => setCurrentPage(el)}
+        >
+          {el}
+        </li>
       ))}
     </ul>
   );

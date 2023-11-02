@@ -26,6 +26,7 @@ interface IState {
   isLoading: boolean;
   countElements: number;
   itemsPerPage: number;
+  currentElement: string;
 }
 
 interface IRequest {
