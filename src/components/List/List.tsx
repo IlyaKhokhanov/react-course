@@ -1,16 +1,16 @@
 import React from 'react';
 import Card from '../Card/Card';
-import { requestObj } from '../../types';
+import { IState } from '../../types';
 import './List.scss';
 
 type ListProps = {
-  data: requestObj[];
+  data: IState;
 };
 
 function List({ data }: ListProps) {
   return (
     <ul className="list">
-      {data.map((el, indx) => (
+      {data.list.map((el, indx) => (
         <Card key={indx} {...el} />
       ))}
     </ul>

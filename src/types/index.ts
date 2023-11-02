@@ -23,10 +23,14 @@ interface IState {
   currentPage: number;
   searchString: string;
   list: requestObj[];
+  isLoading: boolean;
+  countElements: number;
+  itemsPerPage: number;
 }
 
 interface IRequest {
   results: requestObj[];
+  count: number;
 }
 
 type ErrorBoundaryProps = {
