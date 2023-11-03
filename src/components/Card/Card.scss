@@ -1,4 +1,5 @@
-.list-item {
+.list-item,
+.list-item-active {
   display: flex;
   flex-direction: column;
   gap: 5px;
@@ -17,4 +18,8 @@
   &-desc {
     font-weight: 600;
   }
+}
+
+.list-item-active {
+  background: #e2e2e2;
 }

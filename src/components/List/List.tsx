@@ -5,13 +5,19 @@ import './List.scss';
 
 type ListProps = {
   data: IState;
+  setCurrentElement: (url: string) => void;
 };
 
-function List({ data }: ListProps) {
+function List({ data, setCurrentElement }: ListProps) {
   return (
     <ul className="list">
       {data.list.map((el, indx) => (
-        <Card key={indx} {...el} />
+        <Card
+          key={indx}
+          card={el}
+          currentElement={data.currentElement}
+          setCurrentElement={setCurrentElement}
+        />
       ))}
     </ul>
   );

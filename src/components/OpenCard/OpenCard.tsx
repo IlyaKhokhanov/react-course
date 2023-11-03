@@ -1,0 +1,84 @@
+import React, { useEffect, useState } from 'react';
+import './OpenCard.scss';
+import { request } from '../../api';
+import { requestObj } from '../../types';
+import Loader from '../Loader/Loader';
+
+type OpenCardProps = {
+  currentElement: string;
+  setCurrentElement: (url: string) => void;
+};
+
+function OpenCard({ currentElement, setCurrentElement }: OpenCardProps) {
+  const [openCard, setOpenCard] = useState<requestObj | null>(null);
+
+  async function requestCard() {
+    setOpenCard(null);
+    request<requestObj>(currentElement)
+      .then((data) => {
+        if (typeof data !== 'string') {
+          setOpenCard(data);
+        }
+      })
+      .catch((err) => console.error(err));
+  }
+
+  useEffect(() => {
+    requestCard();
+  }, [currentElement]);
+
+  if (!openCard) {
+    return <Loader />;
+  }
+
+  return (
+    <div className="open-card">
+      <button className="open-card-btn" onClick={() => setCurrentElement('')}>
+        ✕
+      </button>
+      <h2 className="open-card-header">{openCard.name}</h2>
+      <div>
+        <span className="open-card-desc">Homeworld: </span>
+        <span>{openCard.homeworld}</span>
+      </div>
+      <div>
+        <span className="open-card-desc">Gender: </span>
+        <span>{openCard.gender}</span>
+      </div>
+      <div>
+        <span className="open-card-desc">Birthday: </span>
+        <span>{openCard.birth_year}</span>
+      </div>
+      {/* <div>
+        <span className="open-card-desc">Created: </span>
+        <span>{openCard.created}</span>
+      </div>
+      <div>
+        <span className="open-card-desc">Edited: </span>
+        <span>{openCard.edited}</span>
+      </div> */}
+      <div>
+        <span className="open-card-desc">Height: </span>
+        <span>{openCard.height}</span>
+      </div>
+      <div>
+        <span className="open-card-desc">Weight: </span>
+        <span>{openCard.mass}</span>
+      </div>
+      <div>
+        <span className="open-card-desc">Color skin: </span>
+        <span>{openCard.skin_color}</span>
+      </div>
+      <div>
+        <span className="open-card-desc">Color hair: </span>
+        <span>{openCard.hair_color}</span>
+      </div>
+      <div>
+        <span className="open-card-desc">Color eye: </span>
+        <span>{openCard.eye_color}</span>
+      </div>
+    </div>
+  );
+}
+
+export default OpenCard;

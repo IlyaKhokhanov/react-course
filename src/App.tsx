@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { request } from './api';
-import { IRequest, IState } from './types';
+import { IRequestList, IState } from './types';
 import List from './components/List/List';
 import Search from './components/Search/Search';
 import Loader from './components/Loader/Loader';
 import Pagination from './components/Pagination/Pagination';
 import './App.scss';
+import OpenCard from './components/OpenCard/OpenCard';
 
 function App() {
   const [state, setState] = useState<IState>({
@@ -15,7 +16,7 @@ function App() {
     isLoading: true,
     countElements: 0,
     itemsPerPage: 10,
-    currentElement: 'fsd',
+    currentElement: '',
   });
 
   function updateList() {
@@ -23,7 +24,7 @@ function App() {
       ...prev,
       isLoading: true,
     }));
-    request<IRequest>(
+    request<IRequestList>(
       `https://swapi.dev/api/people/?page=${state.currentPage}&search=${state.searchString}`,
     )
       .then((data) => {
@@ -55,6 +56,13 @@ function App() {
     }));
   }
 
+  function setCurrentElement(url: string) {
+    setState((prev) => ({
+      ...prev,
+      currentElement: url,
+    }));
+  }
+
   useEffect(() => {
     updateList();
   }, [state.searchString, state.currentPage]);
@@ -76,7 +84,7 @@ function App() {
             <Loader />
           ) : (
             <>
-              <List data={state} />
+              <List data={state} setCurrentElement={setCurrentElement} />
               <Pagination
                 totalCount={state.countElements}
                 itemsPerPage={state.itemsPerPage}
@@ -86,7 +94,12 @@ function App() {
             </>
           )}
         </div>
-        {state.currentElement && <div>{state.currentElement}</div>}
+        {state.currentElement && (
+          <OpenCard
+            currentElement={state.currentElement}
+            setCurrentElement={setCurrentElement}
+          />
+        )}
       </div>
     </div>
   );

@@ -2,9 +2,20 @@ import React from 'react';
 import { requestObj } from '../../types';
 import './Card.scss';
 
-function Card(card: requestObj) {
+type CardProps = {
+  card: requestObj;
+  currentElement: string;
+  setCurrentElement: (url: string) => void;
+};
+
+function Card({ card, currentElement, setCurrentElement }: CardProps) {
   return (
-    <li className="list-item">
+    <li
+      className={currentElement === card.url ? 'list-item-active' : 'list-item'}
+      onClick={() => {
+        setCurrentElement(currentElement === card.url ? '' : card.url);
+      }}
+    >
       <h3 className="list-item-header">{card.name}</h3>
       <div>
         <span className="list-item-desc">Height: </span>

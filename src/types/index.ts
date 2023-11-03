@@ -29,7 +29,7 @@ interface IState {
   currentElement: string;
 }
 
-interface IRequest {
+interface IRequestList {
   results: requestObj[];
   count: number;
 }
@@ -44,7 +44,7 @@ interface ErrorBoundaryState {
 }
 
 export {
-  type IRequest,
+  type IRequestList,
   type requestObj,
   type IState,
   type ErrorBoundaryProps,
