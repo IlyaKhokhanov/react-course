@@ -38,10 +38,6 @@ function OpenCard({ currentElement, setCurrentElement }: OpenCardProps) {
       </button>
       <h2 className="open-card-header">{openCard.name}</h2>
       <div>
-        <span className="open-card-desc">Homeworld: </span>
-        <span>{openCard.homeworld}</span>
-      </div>
-      <div>
         <span className="open-card-desc">Gender: </span>
         <span>{openCard.gender}</span>
       </div>
@@ -49,14 +45,14 @@ function OpenCard({ currentElement, setCurrentElement }: OpenCardProps) {
         <span className="open-card-desc">Birthday: </span>
         <span>{openCard.birth_year}</span>
       </div>
-      {/* <div>
+      <div>
         <span className="open-card-desc">Created: </span>
-        <span>{openCard.created}</span>
+        <span>{new Date(openCard.created).toLocaleString()}</span>
       </div>
       <div>
         <span className="open-card-desc">Edited: </span>
-        <span>{openCard.edited}</span>
-      </div> */}
+        <span>{new Date(openCard.edited).toLocaleString()}</span>
+      </div>
       <div>
         <span className="open-card-desc">Height: </span>
         <span>{openCard.height}</span>

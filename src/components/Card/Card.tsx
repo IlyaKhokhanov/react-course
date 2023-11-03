@@ -33,10 +33,6 @@ function Card({ card, currentElement, setCurrentElement }: CardProps) {
         <span className="list-item-desc">Color hair: </span>
         <span>{card.hair_color}</span>
       </div>
-      <div>
-        <span className="list-item-desc">Color eye: </span>
-        <span>{card.eye_color}</span>
-      </div>
     </li>
   );
 }

@@ -79,7 +79,10 @@ function App() {
       </button>
       <Search searchHandler={setSearchString} />
       <div className="main">
-        <div className="block-left">
+        <div
+          className="block-left"
+          style={{ width: state.currentElement ? '50%' : '100%' }}
+        >
           {state.isLoading ? (
             <Loader />
           ) : (
