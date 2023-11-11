@@ -1,23 +1,26 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import './Pagination.scss';
+import { Context } from '../context/Context';
 
-type PaginationProps = {
-  totalCount: number;
-  itemsPerPage: number;
-  currentPage: number;
-  setCurrentPage: (number: number) => void;
-};
+function Pagination() {
+  const state = useContext(Context)![0];
+  const setState = useContext(Context)![1];
 
-function Pagination({
-  totalCount,
-  itemsPerPage,
-  currentPage,
-  setCurrentPage,
-}: PaginationProps) {
   const numbersArr = [];
 
-  for (let i = 1; i <= Math.ceil(totalCount / itemsPerPage); i++) {
+  for (
+    let i = 1;
+    i <= Math.ceil(state.countElements / state.itemsPerPage);
+    i++
+  ) {
     numbersArr.push(i);
+  }
+
+  function setCurrentPage(number: number) {
+    setState((prev) => ({
+      ...prev,
+      currentPage: number,
+    }));
   }
 
   return (
@@ -26,7 +29,9 @@ function Pagination({
         <li
           key={el}
           className={
-            el === currentPage ? 'pagination-item-active' : 'pagination-item'
+            el === state.currentPage
+              ? 'pagination-item-active'
+              : 'pagination-item'
           }
           onClick={() => setCurrentPage(el)}
         >

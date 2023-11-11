@@ -1,19 +1,30 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { requestObj } from '../../types';
 import './Card.scss';
+import { Context } from '../context/Context';
 
 type CardProps = {
   card: requestObj;
-  currentElement: string;
-  setCurrentElement: (url: string) => void;
 };
 
-function Card({ card, currentElement, setCurrentElement }: CardProps) {
+function Card({ card }: CardProps) {
+  const state = useContext(Context)![0];
+  const setState = useContext(Context)![1];
+
+  function setCurrentElement(url: string) {
+    setState((prev) => ({
+      ...prev,
+      currentElement: url,
+    }));
+  }
+
   return (
     <li
-      className={currentElement === card.url ? 'list-item-active' : 'list-item'}
+      className={
+        state.currentElement === card.url ? 'list-item-active' : 'list-item'
+      }
       onClick={() => {
-        setCurrentElement(currentElement === card.url ? '' : card.url);
+        setCurrentElement(state.currentElement === card.url ? '' : card.url);
       }}
     >
       <h3 className="list-item-header">{card.name}</h3>

@@ -1,23 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Card from '../Card/Card';
-import { IState } from '../../types';
 import './List.scss';
+import { Context } from '../context/Context';
 
-type ListProps = {
-  data: IState;
-  setCurrentElement: (url: string) => void;
-};
+function List() {
+  const state = useContext(Context)![0];
 
-function List({ data, setCurrentElement }: ListProps) {
   return (
     <ul className="list">
-      {data.list.map((el, indx) => (
-        <Card
-          key={indx}
-          card={el}
-          currentElement={data.currentElement}
-          setCurrentElement={setCurrentElement}
-        />
+      {state.list.map((el, indx) => (
+        <Card key={indx} card={el} />
       ))}
     </ul>
   );

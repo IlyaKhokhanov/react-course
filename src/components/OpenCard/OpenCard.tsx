@@ -1,20 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import './OpenCard.scss';
 import { request } from '../../api';
 import { requestObj } from '../../types';
 import Loader from '../Loader/Loader';
+import { Context } from '../context/Context';
 
-type OpenCardProps = {
-  currentElement: string;
-  setCurrentElement: (url: string) => void;
-};
-
-function OpenCard({ currentElement, setCurrentElement }: OpenCardProps) {
+function OpenCard() {
   const [openCard, setOpenCard] = useState<requestObj | null>(null);
+  const state = useContext(Context)![0];
+  const setState = useContext(Context)![1];
 
   async function requestCard() {
     setOpenCard(null);
-    request<requestObj>(currentElement)
+    request<requestObj>(state.currentElement)
       .then((data) => {
         if (typeof data !== 'string') {
           setOpenCard(data);
@@ -25,7 +23,14 @@ function OpenCard({ currentElement, setCurrentElement }: OpenCardProps) {
 
   useEffect(() => {
     requestCard();
-  }, [currentElement]);
+  }, [state.currentElement]);
+
+  function setCurrentElement(url: string) {
+    setState((prev) => ({
+      ...prev,
+      currentElement: url,
+    }));
+  }
 
   if (!openCard) {
     return <Loader />;
