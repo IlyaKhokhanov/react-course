@@ -7,6 +7,7 @@ import Loader from './components/Loader/Loader';
 import Pagination from './components/Pagination/Pagination';
 import './App.scss';
 import OpenCard from './components/OpenCard/OpenCard';
+import { Context } from './components/context/Context';
 
 function App() {
   const [state, setState] = useState<IState>({
@@ -40,71 +41,40 @@ function App() {
       .catch((err) => console.error(err));
   }
 
-  function setSearchString(string: string) {
-    localStorage.setItem('searchString', string);
-    setState((prev) => ({
-      ...prev,
-      searchString: string,
-      currentPage: 1,
-    }));
-  }
-
-  function setCurrentPage(number: number) {
-    setState((prev) => ({
-      ...prev,
-      currentPage: number,
-    }));
-  }
-
-  function setCurrentElement(url: string) {
-    setState((prev) => ({
-      ...prev,
-      currentElement: url,
-    }));
-  }
-
   useEffect(() => {
     updateList();
   }, [state.searchString, state.currentPage]);
 
   return (
-    <div>
-      <button
-        className="error-btn"
-        onClick={() => {
-          throw new Error('Something went wrong');
-        }}
-      >
-        Generate ERROR
-      </button>
-      <Search searchHandler={setSearchString} />
-      <div className="main">
-        <div
-          className="block-left"
-          style={{ width: state.currentElement ? '50%' : '100%' }}
+    <Context.Provider value={[state, setState]}>
+      <div>
+        <button
+          className="error-btn"
+          onClick={() => {
+            throw new Error('Something went wrong');
+          }}
         >
-          {state.isLoading ? (
-            <Loader />
-          ) : (
-            <>
-              <List data={state} setCurrentElement={setCurrentElement} />
-              <Pagination
-                totalCount={state.countElements}
-                itemsPerPage={state.itemsPerPage}
-                currentPage={state.currentPage}
-                setCurrentPage={setCurrentPage}
-              />
-            </>
-          )}
+          Generate ERROR
+        </button>
+        <Search />
+        <div className="main">
+          <div
+            className="block-left"
+            style={{ width: state.currentElement ? '50%' : '100%' }}
+          >
+            {state.isLoading ? (
+              <Loader />
+            ) : (
+              <>
+                <List />
+                <Pagination />
+              </>
+            )}
+          </div>
+          {state.currentElement && <OpenCard />}
         </div>
-        {state.currentElement && (
-          <OpenCard
-            currentElement={state.currentElement}
-            setCurrentElement={setCurrentElement}
-          />
-        )}
       </div>
-    </div>
+    </Context.Provider>
   );
 }
 
