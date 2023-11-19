@@ -1,14 +1,14 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import Card from '../Card/Card';
 import './List.scss';
-import { Context } from '../context/Context';
+import { useAppSelector } from '../../hooks/hooks';
 
 function List() {
-  const state = useContext(Context)![0];
+  const { list } = useAppSelector((state) => state.application);
 
   return (
     <ul className="list">
-      {state.list.map((el, indx) => (
+      {list.map((el, indx) => (
         <Card key={indx} card={el} />
       ))}
     </ul>

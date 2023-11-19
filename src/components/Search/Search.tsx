@@ -1,25 +1,17 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import './Search.scss';
-import { Context } from '../context/Context';
+import { useAppDispatch } from '../../hooks/hooks';
+import { setSearchString } from '../../redux/slices/application';
 
 function Search() {
   const [input, setInput] = useState(
     localStorage.getItem('searchString') || '',
   );
 
-  const setState = useContext(Context)![1];
+  const dispatch = useAppDispatch();
 
   function inputChange(e: React.ChangeEvent<HTMLInputElement>) {
     setInput(e.target.value);
-  }
-
-  function setSearchString(string: string) {
-    localStorage.setItem('searchString', string);
-    setState((prev) => ({
-      ...prev,
-      searchString: string,
-      currentPage: 1,
-    }));
   }
 
   return (
@@ -30,7 +22,10 @@ function Search() {
         type="text"
         onChange={inputChange}
       />
-      <button className="header-btn" onClick={() => setSearchString(input)}>
+      <button
+        className="header-btn"
+        onClick={() => dispatch(setSearchString(input))}
+      >
         Search
       </button>
     </div>

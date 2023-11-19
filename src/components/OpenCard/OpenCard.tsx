@@ -1,18 +1,20 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './OpenCard.scss';
 import { request } from '../../api';
 import { requestObj } from '../../types';
 import Loader from '../Loader/Loader';
-import { Context } from '../context/Context';
+import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
+import { setCurrentElement } from '../../redux/slices/application';
 
 function OpenCard() {
   const [openCard, setOpenCard] = useState<requestObj | null>(null);
-  const state = useContext(Context)![0];
-  const setState = useContext(Context)![1];
+
+  const dispatch = useAppDispatch();
+  const { currentElement } = useAppSelector((state) => state.application);
 
   async function requestCard() {
     setOpenCard(null);
-    request<requestObj>(state.currentElement)
+    request<requestObj>(currentElement)
       .then((data) => {
         if (typeof data !== 'string') {
           setOpenCard(data);
@@ -23,14 +25,7 @@ function OpenCard() {
 
   useEffect(() => {
     requestCard();
-  }, [state.currentElement]);
-
-  function setCurrentElement(url: string) {
-    setState((prev) => ({
-      ...prev,
-      currentElement: url,
-    }));
-  }
+  }, [currentElement]);
 
   if (!openCard) {
     return <Loader />;
@@ -38,7 +33,10 @@ function OpenCard() {
 
   return (
     <div className="open-card">
-      <button className="open-card-btn" onClick={() => setCurrentElement('')}>
+      <button
+        className="open-card-btn"
+        onClick={() => dispatch(setCurrentElement(''))}
+      >
         ✕
       </button>
       <h2 className="open-card-header">{openCard.name}</h2>
