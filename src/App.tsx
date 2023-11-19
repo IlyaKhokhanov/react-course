@@ -1,41 +1,34 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { request } from './api';
-import { IRequestList, IState } from './types';
+import { IRequestList } from './types';
 import List from './components/List/List';
 import Search from './components/Search/Search';
 import Loader from './components/Loader/Loader';
 import Pagination from './components/Pagination/Pagination';
 import './App.scss';
 import OpenCard from './components/OpenCard/OpenCard';
-import { Context } from './components/context/Context';
+import { useAppDispatch, useAppSelector } from './hooks/hooks';
+import {
+  setCountElements,
+  setList,
+  setLoading,
+} from './redux/slices/application';
 
 function App() {
-  const [state, setState] = useState<IState>({
-    currentPage: 1,
-    searchString: localStorage.getItem('searchString') || '',
-    list: [],
-    isLoading: true,
-    countElements: 0,
-    itemsPerPage: 10,
-    currentElement: '',
-  });
+  const dispatch = useAppDispatch();
+  const { currentPage, searchString, currentElement, isLoading } =
+    useAppSelector((state) => state.application);
 
   function updateList() {
-    setState((prev) => ({
-      ...prev,
-      isLoading: true,
-    }));
+    dispatch(setLoading(true));
     request<IRequestList>(
-      `https://swapi.dev/api/people/?page=${state.currentPage}&search=${state.searchString}`,
+      `https://swapi.dev/api/people/?page=${currentPage}&search=${searchString}`,
     )
       .then((data) => {
         if (typeof data !== 'string') {
-          setState((prev) => ({
-            ...prev,
-            list: data.results,
-            isLoading: false,
-            countElements: data.count,
-          }));
+          dispatch(setList(data.results));
+          dispatch(setLoading(true));
+          dispatch(setCountElements(data.count));
         }
       })
       .catch((err) => console.error(err));
@@ -43,38 +36,36 @@ function App() {
 
   useEffect(() => {
     updateList();
-  }, [state.searchString, state.currentPage]);
+  }, [searchString, currentPage]);
 
   return (
-    <Context.Provider value={[state, setState]}>
-      <div>
-        <button
-          className="error-btn"
-          onClick={() => {
-            throw new Error('Something went wrong');
-          }}
+    <div>
+      <button
+        className="error-btn"
+        onClick={() => {
+          throw new Error('Something went wrong');
+        }}
+      >
+        Generate ERROR
+      </button>
+      <Search />
+      <div className="main">
+        <div
+          className="block-left"
+          style={{ width: currentElement ? '50%' : '100%' }}
         >
-          Generate ERROR
-        </button>
-        <Search />
-        <div className="main">
-          <div
-            className="block-left"
-            style={{ width: state.currentElement ? '50%' : '100%' }}
-          >
-            {state.isLoading ? (
-              <Loader />
-            ) : (
-              <>
-                <List />
-                <Pagination />
-              </>
-            )}
-          </div>
-          {state.currentElement && <OpenCard />}
+          {isLoading ? (
+            <Loader />
+          ) : (
+            <>
+              <List />
+              <Pagination />
+            </>
+          )}
         </div>
+        {currentElement && <OpenCard />}
       </div>
-    </Context.Provider>
+    </div>
   );
 }
 

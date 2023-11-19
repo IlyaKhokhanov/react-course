@@ -1,30 +1,24 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { requestObj } from '../../types';
 import './Card.scss';
-import { Context } from '../context/Context';
+import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
+import { setCurrentElement } from '../../redux/slices/application';
 
 type CardProps = {
   card: requestObj;
 };
 
 function Card({ card }: CardProps) {
-  const state = useContext(Context)![0];
-  const setState = useContext(Context)![1];
-
-  function setCurrentElement(url: string) {
-    setState((prev) => ({
-      ...prev,
-      currentElement: url,
-    }));
-  }
+  const dispatch = useAppDispatch();
+  const { currentElement } = useAppSelector((state) => state.application);
 
   return (
     <li
-      className={
-        state.currentElement === card.url ? 'list-item-active' : 'list-item'
-      }
+      className={currentElement === card.url ? 'list-item-active' : 'list-item'}
       onClick={() => {
-        setCurrentElement(state.currentElement === card.url ? '' : card.url);
+        dispatch(
+          setCurrentElement(currentElement === card.url ? '' : card.url),
+        );
       }}
     >
       <h3 className="list-item-header">{card.name}</h3>

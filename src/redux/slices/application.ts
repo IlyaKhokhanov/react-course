@@ -26,10 +26,25 @@ const catalogSlice = createSlice({
     setCurrentElement(state, action) {
       state.currentElement = action.payload;
     },
+    setLoading(state, action) {
+      state.isLoading = action.payload;
+    },
+    setCountElements(state, action) {
+      state.countElements = action.payload;
+    },
+    setList(state, action) {
+      state.list = action.payload;
+    },
   },
 });
 
-export const { setSearchString, setCurrentPage, setCurrentElement } =
-  catalogSlice.actions;
+export const {
+  setSearchString,
+  setCurrentPage,
+  setCurrentElement,
+  setCountElements,
+  setLoading,
+  setList,
+} = catalogSlice.actions;
 
 export default catalogSlice.reducer;
